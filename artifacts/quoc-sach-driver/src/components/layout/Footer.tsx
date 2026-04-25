@@ -39,7 +39,7 @@ export function Footer() {
               <a href="mailto:tranquocsach1992@gmail.com" className="text-muted-foreground hover:text-[#EA4335] transition-colors">
                 <SiGmail className="h-5 w-5" />
               </a>
-              <a href="https://facebook.com/tranquocsach1992" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-[#1877F2] transition-colors">
+              <a href="https://www.facebook.com/nhao.zokiemseo" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-[#1877F2] transition-colors">
                 <SiFacebook className="h-5 w-5" />
               </a>
             </div>

@@ -27,7 +27,7 @@ const channels = [
   },
   {
     id: "facebook",
-    href: "https://facebook.com/tranquocsach1992",
+    href: "https://www.facebook.com/nhao.zokiemseo",
     icon: SiFacebook,
     color: "#1877F2",
     handle: "tranquocsach1992@gmail.com",

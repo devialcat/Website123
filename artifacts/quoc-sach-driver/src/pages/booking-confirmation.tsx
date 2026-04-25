@@ -194,7 +194,7 @@ export default function BookingConfirmation() {
               <span className="text-xs">Email</span>
             </a>
             <a
-              href="https://facebook.com/tranquocsach1992"
+              href="https://www.facebook.com/nhao.zokiemseo"
               target="_blank"
               rel="noreferrer"
               className="flex flex-col items-center gap-2 p-3 rounded-lg border hover:border-primary transition-colors"

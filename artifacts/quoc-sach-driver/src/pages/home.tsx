@@ -207,7 +207,7 @@ export default function Home() {
               <span className="text-sm font-medium">{t("contact.email")}</span>
             </a>
             <a
-              href="https://facebook.com/tranquocsach1992"
+              href="https://www.facebook.com/nhao.zokiemseo"
               target="_blank"
               rel="noreferrer"
               className="flex flex-col items-center gap-3 p-6 rounded-xl bg-card border hover:border-primary transition-all hover:-translate-y-0.5"
