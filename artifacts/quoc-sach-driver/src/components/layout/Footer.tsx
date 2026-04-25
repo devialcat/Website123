@@ -48,9 +48,12 @@ export function Footer() {
         
         <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
           <span>&copy; {new Date().getFullYear()} Quốc Sách Driver. All rights reserved.</span>
-          <Link href="/admin" className="hover:text-primary transition-colors text-xs opacity-60 hover:opacity-100">
-            Admin
-          </Link>
+          <div className="flex items-center gap-4">
+            <span className="text-xs">Product by MMS</span>
+            <Link href="/admin" className="hover:text-primary transition-colors text-xs opacity-60 hover:opacity-100">
+              Admin
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
