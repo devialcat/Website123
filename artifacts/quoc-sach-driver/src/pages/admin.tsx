@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   useGetAdminSummary,
   useListBookings,
@@ -11,6 +11,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useT, useLanguage } from "@/i18n/LanguageContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -18,6 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const ADMIN_PASSWORD = "1234567890";
+const AUTH_STORAGE_KEY = "qsd_admin_auth";
 import {
   Table,
   TableBody,
@@ -36,7 +42,7 @@ import {
   Legend,
 } from "recharts";
 import { cityLabel } from "@/lib/localize";
-import { Calendar, DollarSign, ListChecks, Clock4 } from "lucide-react";
+import { Calendar, DollarSign, ListChecks, Clock4, Lock, LogOut } from "lucide-react";
 
 const STATUS_COLORS: Record<BookingStatus, string> = {
   pending: "#EAB308",
@@ -54,7 +60,90 @@ const statusBadgeClasses: Record<BookingStatus, string> = {
 
 type StatusFilter = "all" | BookingStatus;
 
+function AdminLogin({ onSuccess }: { onSuccess: () => void }) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === ADMIN_PASSWORD) {
+      sessionStorage.setItem(AUTH_STORAGE_KEY, "true");
+      setError("");
+      onSuccess();
+    } else {
+      setError("Mật khẩu không đúng. Vui lòng thử lại.");
+      setPassword("");
+    }
+  };
+
+  return (
+    <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
+      <Card className="w-full max-w-md">
+        <CardContent className="p-8">
+          <div className="flex flex-col items-center text-center mb-6">
+            <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <Lock className="h-7 w-7 text-primary" />
+            </div>
+            <h1 className="font-serif text-2xl font-bold mb-2">
+              Bảng điều khiển Admin
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Vui lòng nhập mật khẩu để tiếp tục
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="admin-password">Mật khẩu</Label>
+              <Input
+                id="admin-password"
+                type="password"
+                autoFocus
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••"
+                data-testid="input-admin-password"
+              />
+              {error && (
+                <p className="text-sm text-destructive" data-testid="text-admin-error">
+                  {error}
+                </p>
+              )}
+            </div>
+            <Button
+              type="submit"
+              className="w-full"
+              data-testid="button-admin-login"
+            >
+              Đăng nhập
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function Admin() {
+  const [authed, setAuthed] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem(AUTH_STORAGE_KEY) === "true") {
+      setAuthed(true);
+    }
+  }, []);
+
+  if (!authed) {
+    return <AdminLogin onSuccess={() => setAuthed(true)} />;
+  }
+
+  return <AdminDashboard onLogout={() => {
+    sessionStorage.removeItem(AUTH_STORAGE_KEY);
+    setAuthed(false);
+  }} />;
+}
+
+function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const { t } = useT();
   const { language } = useLanguage();
   const queryClient = useQueryClient();
@@ -88,9 +177,20 @@ export default function Admin() {
 
   return (
     <div className="container py-12">
-      <h1 className="font-serif text-3xl md:text-4xl font-bold mb-8">
-        {t("admin.dashboard")}
-      </h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="font-serif text-3xl md:text-4xl font-bold">
+          {t("admin.dashboard")}
+        </h1>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onLogout}
+          data-testid="button-admin-logout"
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          Đăng xuất
+        </Button>
+      </div>
 
       {summary && (
         <>
